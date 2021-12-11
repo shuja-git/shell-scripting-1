@@ -21,3 +21,18 @@ DOWNLOAD mongodb
 cd /tmp/mongodb-main
 mongo < catalogue.js &>>${LOG_FILE} && mongo < users.js &>>${LOG_FILE}
 STAT_CHECK $? "Load Schema"
+
+
+### Redis Setup
+curl -L https://raw.githubusercontent.com/roboshop-devops-project/redis/main/redis.repo -o /etc/yum.repos.d/redis.repo &>>${LOG_FILE}
+STAT_CHECK $? "Download Redis Repo"
+
+yum install redis -y  &>>${LOG_FILE}
+STAT_CHECK $? "Install Redis"
+
+
+sed -i -e 's/127.0.0.1/0.0.0.0/' /etc/redis.conf &>>${LOG_FILE}
+STAT_CHECK $? "Update Redis Config"
+
+systemctl enable redis &>>${LOG_FILE}  && systemctl start redis &>>${LOG_FILE}
+STAT_CHECK $? "Update Redis"
