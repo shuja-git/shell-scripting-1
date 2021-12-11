@@ -2,6 +2,7 @@
 
 # source is nothing but import , like export command
 source components/common.sh
+MAX_LENGTH=$(cat ${0}  | grep -v cat | grep STAT_CHECK | awk -F '"' '{print $2}'  | awk '{ print length }'  | sort  | tail -1)
 
 yum install nginx -y &>>${LOG_FILE}
 STAT_CHECK $? "Nginx Installation"
