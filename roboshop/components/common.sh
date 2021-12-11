@@ -2,6 +2,7 @@ LOG_FILE=/tmp/roboshop.log
 rm -f ${LOG_FILE}
 
 STAT_CHECK() {
+  SPACE=""
   LENGTH=$(echo $2 |awk '{ print length }' )
   LEFT=$((${MAX_LENGTH}-${LENGTH}))
   while [ $LEFT -gt 0 ]; do
