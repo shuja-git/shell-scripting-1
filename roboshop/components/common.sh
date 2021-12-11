@@ -4,7 +4,7 @@ rm -f ${LOG_FILE}
 STAT_CHECK() {
   LENGTH=$(echo $2 |awk '{ print length }' )
   echo $LENGTH
-  LEFT=$((${MAX_LENGTH} - ${LENGTH}))
+  LEFT=$((${MAX_LENGTH}-${LENGTH}))
   while [ $LEFT -gt 0 ]; do
     SPACE=$(echo -n "|")
     echo |
