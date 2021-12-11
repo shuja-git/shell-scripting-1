@@ -3,11 +3,10 @@ rm -f ${LOG_FILE}
 
 STAT_CHECK() {
   LENGTH=$(echo $2 |awk '{ print length }' )
-  echo $LENGTH
   LEFT=$((${MAX_LENGTH}-${LENGTH}))
+  echo $LEFT
   while [ $LEFT -gt 0 ]; do
     SPACE=$(echo -n "${SPACE}|")
-    echo '|'
     LEFT=$((${LEFT}-1))
   done
   echo $SPACE
