@@ -58,6 +58,5 @@ if [ $? -ne 0 ]; then
   STAT_CHECK $? "Create APp User in RabbitMQ"
 fi
 
-
-# rabbitmqctl set_user_tags roboshop administrator
-# rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+rabbitmqctl set_user_tags roboshop administrator  &>>${LOG_FILE} && rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"  &>>${LOG_FILE}
+STAT_CHECK $? "Configure APp User Permissions"
