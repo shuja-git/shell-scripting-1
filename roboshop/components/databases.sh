@@ -33,5 +33,12 @@ STAT_CHECK $? "Download MongoDB repo"
 yum install -y mongodb-org &>>${LOG_FILE}
 STAT_CHECK $? "Install MongoDB"
 
-systemctl enable mongod &>>${LOG_FILE} && systemctl start mongod &>>${LOG_FILE}
+sed -i 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf &>>${LOG_FILE}
+STAT_CHECK $? "Update MongoDB Service"
+
+systemctl enable mongod &>>${LOG_FILE} && systemctl restart mongod &>>${LOG_FILE}
 STAT_CHECK $? "Start MongoDB Service"
+
+DOWNLOAD mongodb
+
+
