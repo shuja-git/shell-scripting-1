@@ -34,8 +34,26 @@ yum install redis -y  &>>${LOG_FILE}
 STAT_CHECK $? "Install Redis"
 
 
-sed -i -e 's/127.0.0.1/0.0.0.0/' /etc/redis.conf &>>${LOG_FILE}
+sed -i 's/127.0.0.1/0.0.0.0/' /etc/redis.conf &>>${LOG_FILE}
 STAT_CHECK $? "Update Redis Config"
 
 systemctl enable redis &>>${LOG_FILE}  && systemctl start redis &>>${LOG_FILE}
 STAT_CHECK $? "Update Redis"
+
+### RabbitMQ Setup
+echo -e "        ------>>>>>> \e[1;35mRabbitMQ Setup\e[0m <<<<<<------"
+
+curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | sudo bash &>>${LOG_FILE}
+STAT_CHECK $? "Download RabbitMQ Repo"
+
+yum install https://github.com/rabbitmq/erlang-rpm/releases/download/v23.2.6/erlang-23.2.6-1.el7.x86_64.rpm rabbitmq-server -y &>>${LOG_FILE}
+STAT_CHECK $? "Install Erlang & RabbitMQ"
+
+
+systemctl enable rabbitmq-server &>>${LOG_FILE}  && systemctl start rabbitmq-server &>>${LOG_FILE}
+
+rabbitmqctl add_user roboshop roboshop123 &>>${LOG_FILE}
+STAT_CHECK $? "Create APp User in RabbitMQ"
+
+# rabbitmqctl set_user_tags roboshop administrator
+# rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
