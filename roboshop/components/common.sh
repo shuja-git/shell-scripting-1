@@ -6,7 +6,7 @@ STAT_CHECK() {
   echo $LENGTH
   LEFT=$((${MAX_LENGTH} - ${LENGTH}))
   while [ $LEFT -gt 0 ]; do
-    SPACE=$(echo -n "*")
+    SPACE=$(echo -n "|")
     LEFT=$((${LEFT}-1))
   done
   echo $SPACE
