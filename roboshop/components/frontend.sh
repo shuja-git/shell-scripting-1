@@ -11,9 +11,6 @@ DOWNLOAD frontend
 rm -rf /usr/share/nginx/html/*
 STAT_CHECK $? "Remove old HTML Pages"
 
-cd /tmp && unzip -o /tmp/frontend.zip &>>${LOG_FILE}
-STAT_CHECK $? "Extracting Frontend Content"
-
 cd  /tmp/frontend-main/static/ && cp -r * /usr/share/nginx/html/
 STAT_CHECK $? "Copying Frontend Content"
 
