@@ -7,8 +7,12 @@ MAX_LENGTH=$(cat ${0}  components/common.sh | grep -v -w cat | grep STAT_CHECK |
 yum install nodejs make gcc-c++ -y &>>${LOG_FILE}
 STAT_CHECK $? "Install NodeJS"
 
-useradd roboshop   &>>${LOG_FILE}
-STAT_CHECK $? "Add Application User"
+id roboshop &>>${LOG_FILE}
+if [ $? -ne 0 ]; then
+  useradd roboshop   &>>${LOG_FILE}
+  STAT_CHECK $? "Add Application User"
+fi
+
 
 DOWNLOAD catalogue
 #$ curl -s -L -o /tmp/catalogue.zip "https://github.com/roboshop-devops-project/catalogue/archive/main.zip"
