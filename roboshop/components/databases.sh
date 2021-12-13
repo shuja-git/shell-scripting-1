@@ -66,6 +66,8 @@ STAT_CHECK $? "Configure APp User Permissions"
 
 ### MySQL Setup
 
+echo -e "        ------>>>>>> \e[1;35mMySQL Setup\e[0m <<<<<<------"
+
 curl -s -L -o /etc/yum.repos.d/mysql.repo https://raw.githubusercontent.com/roboshop-devops-project/mysql/main/mysql.repo &>>${LOG_FILE}
 STAT_CHECK $? "Configure YUM Repos"
 
@@ -76,11 +78,11 @@ STAT_CHECK $? "Installing MySQL"
 systemctl enable mysqld &>>${LOG_FILE} && systemctl start mysqld &>>${LOG_FILE}
 STAT_CHECK $? "Start MySQL Service"
 
+DEFAULT_PASSWORD=$(grep 'temporary password' /var/log/mysqld.log  | awk '{print $NF}')
 
-#
-#Now a default root password will be generated and given in the log file.
-## grep temp /var/log/mysqld.log
-#
+echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RoboShop@1';" >/tmp/pass.sql
+mysql -uroot -p"${DEFAULT_PASSWORD}" </tmp/pass.sql
+
 #Next, We need to change the default root password in order to start using the database service.
 ## mysql_secure_installation
 #
