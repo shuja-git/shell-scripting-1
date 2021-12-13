@@ -4,6 +4,8 @@ source components/common.sh
 
 MAX_LENGTH=$(cat ${0}  | grep -v cat | grep STAT_CHECK | awk -F '"' '{print $2}'  | awk '{ print length }'  | sort  | tail -1)
 
+echo ${0}
+
 echo $MAX_LENGTH
 
 yum install nodejs make gcc-c++ -y &>>${LOG_FILE}
