@@ -28,10 +28,8 @@ STAT_CHECK $? "Install NodeJS dependencies"
 
 chown roboshop:roboshop -R /home/roboshop
 
-#NOTE: We need to update the IP address of MONGODB Server in systemd.service file
-#Now, lets set up the service with systemctl.
-#
-## mv /home/roboshop/catalogue/systemd.service /etc/systemd/system/catalogue.service
-## systemctl daemon-reload
-## systemctl start catalogue
-## systemctl enable catalogue
+sed -i -e 's/MONGO_DNSNAME/mongo.roboshop.internal/' /home/roboshop/catalogue/systemd.service &>>${LOG_FILE} && mv /home/roboshop/catalogue/systemd.service /etc/systemd/system/catalogue.service  &>>${LOG_FILE}
+STAT_CHECK $? "Update SystemD Config file"
+
+systemctl daemon-reload &>>${LOG_FILE} && systemctl start catalogue &>>${LOG_FILE} && systemctl enable catalogue &>>${LOG_FILE}
+STAT_CHECK $? "Start Catalogue Service"
