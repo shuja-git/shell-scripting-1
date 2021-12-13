@@ -5,6 +5,7 @@ STAT_CHECK() {
   SPACE=""
   LENGTH=$(echo $2 |awk '{ print length }' )
   LEFT=$((${MAX_LENGTH}-${LENGTH}))
+  echo $LEFT
   while [ $LEFT -gt 0 ]; do
     SPACE=$(echo -n "${SPACE} ")
     LEFT=$((${LEFT}-1))
