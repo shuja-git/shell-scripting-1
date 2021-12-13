@@ -81,7 +81,8 @@ STAT_CHECK $? "Start MySQL Service"
 DEFAULT_PASSWORD=$(grep 'temporary password' /var/log/mysqld.log  | awk '{print $NF}')
 
 echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RoboShop@1';" >/tmp/pass.sql
-mysql -uroot -p"${DEFAULT_PASSWORD}" </tmp/pass.sql
+mysql --connect-expired-password -uroot -p"${DEFAULT_PASSWORD}" </tmp/pass.sql &>>${LOG_FILE}
+STAT_CHECK $? "Setup new root password"
 
 #Next, We need to change the default root password in order to start using the database service.
 ## mysql_secure_installation
