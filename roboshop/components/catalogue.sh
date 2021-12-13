@@ -4,7 +4,7 @@ source components/common.sh
 
 MAX_LENGTH=$(cat ${0}  | grep -v cat | grep STAT_CHECK | awk -F '"' '{print $2}'  | awk '{ print length }'  | sort  | tail -1)
 
-cat ${0}  | grep -v cat | grep STAT_CHECK
+cat ${0} | grep STAT_CHECK
 
 echo $MAX_LENGTH
 
