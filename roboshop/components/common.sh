@@ -32,7 +32,7 @@ SYSTEMD_SETUP() {
           -e 's/MONGO_ENDPOINT/mongo.roboshop.internal/' \
           -e 's/CATALOGUE_ENDPOINT/catalogue.roboshop.internal/' \
           -e 's/CARTENDPOINT/cart.roboshop.internal/' \
-          -e 's/DNHOST/mysql.roboshop.internal/' /home/roboshop/${component}/systemd.service &>>${LOG_FILE} && mv /home/roboshop/${component}/systemd.service /etc/systemd/system/${component}.service  &>>${LOG_FILE}
+          -e 's/DBHOST/mysql.roboshop.internal/' /home/roboshop/${component}/systemd.service &>>${LOG_FILE} && mv /home/roboshop/${component}/systemd.service /etc/systemd/system/${component}.service  &>>${LOG_FILE}
   STAT_CHECK $? "Update SystemD Config file"
 
   systemctl daemon-reload &>>${LOG_FILE} && systemctl start ${component} &>>${LOG_FILE} && systemctl enable ${component} &>>${LOG_FILE}
