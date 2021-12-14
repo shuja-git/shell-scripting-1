@@ -101,7 +101,7 @@ PYTHON() {
   SYSTEMD_SETUP
 }
 
-PYTHON() {
+GOLANG() {
   component=${1}
   yum install golang -y &>>${LOG_FILE}
   STAT_CHECK $? "Installing GoLang"
