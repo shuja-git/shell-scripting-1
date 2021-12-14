@@ -25,35 +25,8 @@ STAT_CHECK() {
 
 set-hostname -skip-apply ${COMPONENT}
 
-DOWNLOAD() {
-  curl -s -L -o /tmp/${1}.zip "https://github.com/roboshop-devops-project/${1}/archive/main.zip" &>>${LOG_FILE}
-  STAT_CHECK $? "Download ${1} Code"
-  cd /tmp
-  unzip -o /tmp/${1}.zip &>>${LOG_FILE}
-  STAT_CHECK $? "Extract ${1} Code"
-}
-
-NODEJS() {
-  component=${1}
-  yum install nodejs make gcc-c++ -y &>>${LOG_FILE}
-  STAT_CHECK $? "Install NodeJS"
-
-  id roboshop &>>${LOG_FILE}
-  if [ $? -ne 0 ]; then
-    useradd roboshop   &>>${LOG_FILE}
-    STAT_CHECK $? "Add Application User"
-  fi
-
-  DOWNLOAD ${component}
-
-  rm -rf /home/roboshop/${component} && mkdir -p /home/roboshop/${component} && cp -r /tmp/${component}-main/* /home/roboshop/${component} &>>${LOG_FILE}
-  STAT_CHECK $? "Copy ${component} Content"
-
-  cd /home/roboshop/${component} && npm install --unsafe-perm &>>${LOG_FILE}
-  STAT_CHECK $? "Install NodeJS dependencies"
-
+SYSTEMD_SETUP() {
   chown roboshop:roboshop -R /home/roboshop
-
   sed -i  -e 's/MONGO_DNSNAME/mongo.roboshop.internal/' \
           -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' \
           -e 's/MONGO_ENDPOINT/mongo.roboshop.internal/' \
@@ -62,4 +35,50 @@ NODEJS() {
 
   systemctl daemon-reload &>>${LOG_FILE} && systemctl start ${component} &>>${LOG_FILE} && systemctl enable ${component} &>>${LOG_FILE}
   STAT_CHECK $? "Start ${component} Service"
+}
+
+APP_USER_SETUP() {
+  id roboshop &>>${LOG_FILE}
+  if [ $? -ne 0 ]; then
+    useradd roboshop   &>>${LOG_FILE}
+    STAT_CHECK $? "Add Application User"
+  fi
+
+  DOWNLOAD ${component}
+}
+
+DOWNLOAD() {
+  curl -s -L -o /tmp/${1}.zip "https://github.com/roboshop-devops-project/${1}/archive/main.zip" &>>${LOG_FILE}
+  STAT_CHECK $? "Download ${1} Code"
+  cd /tmp
+  unzip -o /tmp/${1}.zip &>>${LOG_FILE}
+  STAT_CHECK $? "Extract ${1} Code"
+  rm -rf /home/roboshop/${component} && mkdir -p /home/roboshop/${component} && cp -r /tmp/${component}-main/* /home/roboshop/${component} &>>${LOG_FILE}
+  STAT_CHECK $? "Copy ${component} Content"
+}
+
+NODEJS() {
+  component=${1}
+  yum install nodejs make gcc-c++ -y &>>${LOG_FILE}
+  STAT_CHECK $? "Install NodeJS"
+
+  APP_USER_SETUP
+
+  cd /home/roboshop/${component} && npm install --unsafe-perm &>>${LOG_FILE}
+  STAT_CHECK $? "Install NodeJS dependencies"
+
+  SYSTEMD_SETUP
+}
+
+JAVA() {
+  component=${1}
+  yum install maven -y &>>${LOG_FILE}
+  STAT_CHECK $? "Installing Maven"
+
+  APP_USER_SETUP
+
+  cd /home/roboshop/${component} && mvn clean package &>>${LOG_FILE} && mv target/${component}-1.0.jar ${component}.jar &>>${LOG_FILE}
+  STAT_CHECK $? "Compile Java Code"
+
+  SYSTEMD_SETUP
 }
