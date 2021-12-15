@@ -37,7 +37,7 @@ STAT_CHECK $? "Install Redis"
 sed -i 's/127.0.0.1/0.0.0.0/' /etc/redis.conf /etc/redis/redis.conf &>>${LOG_FILE}
 STAT_CHECK $? "Update Redis Config"
 
-systemctl enable redis &>>${LOG_FILE}  && systemctl start redis &>>${LOG_FILE}
+systemctl enable redis &>>${LOG_FILE}  && systemctl restart redis &>>${LOG_FILE}
 STAT_CHECK $? "Update Redis"
 
 ### RabbitMQ Setup
