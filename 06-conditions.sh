@@ -75,3 +75,30 @@ fi
 #  [ expression1 -a expression2 ] -> True if both are true
 # LOGICAL OR  -o
 #  [ expression1 -o expression2 ] -> True if any expressions is true
+
+# Case command.
+
+### PROBLEM : It can do only string comparisions, It will not work with files and numbers.
+
+## Syntax
+
+#case $VAR in
+#  word1)
+#    commands1
+#    ;;
+#  word2)
+#    commands2
+#    ;;
+#esac
+
+read -p 'Enter which component to install: ' component
+
+case $component in
+  frontend)
+    echo "Frontend Setup"
+    ;;
+  catalogue)
+    echo "catalogue setup"
+    ;;
+esac
+
