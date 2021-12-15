@@ -16,3 +16,7 @@ while [ $no -gt 0 ]; do
   echo iteration - $no
   no=$(($no-1))
 done
+
+for component in frontend catalogue monogdb ; do
+  echo   Component - $component
+done
