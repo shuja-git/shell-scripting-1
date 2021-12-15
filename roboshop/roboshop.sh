@@ -17,4 +17,4 @@ if [ ! -e components/${COMPONENT}.sh ]; then
   exit
 fi
 
-bash -x components/${COMPONENT}.sh
+bash components/${COMPONENT}.sh
