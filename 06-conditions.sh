@@ -100,5 +100,8 @@ case $component in
   catalogue)
     echo "catalogue setup"
     ;;
+  *)
+    echo "No such component to setup"
+    ;;
 esac
 
